@@ -1,32 +1,40 @@
 package com.stocksense.service;
 
+import com.stocksense.entity.Sale;
+import com.stocksense.entity.Forecast;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class ForecastService {
 
-    // 1. Moving Average Forecasting (7 days)
-    public double calculateMovingAverage(List<Integer> pastSales) {
-        if (pastSales == null || pastSales.isEmpty()) return 0.0;
+    // 1. Moving Average Forecasting using Sale entity
+    public double calculateMovingAverage(List<Sale> recentSales) {
+        if (recentSales == null || recentSales.isEmpty()) return 0.0;
         
         int sum = 0;
-        int days = Math.min(pastSales.size(), 7); // Use up to last 7 days
+        int days = Math.min(recentSales.size(), 7); // Use up to last 7 days
         
-        for (int i = pastSales.size() - days; i < pastSales.size(); i++) {
-            sum += pastSales.get(i);
+        for (int i = recentSales.size() - days; i < recentSales.size(); i++) {
+            // Pulls actual historical sales from Member 4's database variable
+            sum += recentSales.get(i).getQuantitySold(); 
         }
         return (double) sum / days;
     }
 
-    // 2. Mean Absolute Error (MAE)
-    public double calculateMAE(List<Double> actualDemand, List<Double> predictedDemand) {
-        if (actualDemand.size() != predictedDemand.size() || actualDemand.isEmpty()) return 0.0;
+    // 2. Mean Absolute Error (MAE) using Forecast entity
+    public double calculateMAE(List<Forecast> pastForecasts) {
+        if (pastForecasts == null || pastForecasts.isEmpty()) return 0.0;
         
         double totalError = 0;
-        for (int i = 0; i < actualDemand.size(); i++) {
-            totalError += Math.abs(actualDemand.get(i) - predictedDemand.get(i));
+        int validRecords = 0;
+        
+        for (Forecast forecast : pastForecasts) {
+            if (forecast.getActualDemand() != null && forecast.getPredictedDemand() != null) {
+                totalError += Math.abs(forecast.getActualDemand() - forecast.getPredictedDemand());
+                validRecords++;
+            }
         }
-        return totalError / actualDemand.size();
+        return validRecords == 0 ? 0.0 : totalError / validRecords;
     }
 }
