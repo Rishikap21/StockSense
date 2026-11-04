@@ -8,6 +8,6 @@ import java.util.List;
 public interface ForecastRepository
         extends JpaRepository<Forecast, Long> {
 
-    List<Forecast> findByProductId(Long productId);
+    List<Forecast> findByProduct_Id(Long productId);
 
 }

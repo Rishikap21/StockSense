@@ -1,0 +1,21 @@
+product_code,product_name,current_stock,lead_time_days
+P001,Rice 5kg,180,4
+P002,Wheat Flour 1kg,95,3
+P003,Sugar 1kg,75,5
+P004,Cooking Oil 1L,60,6
+P005,Milk Powder 500g,42,7
+P006,Tea 250g,110,4
+P007,Coffee 200g,55,5
+P008,Salt 1kg,140,2
+P009,Soap Bar,90,3
+P010,Shampoo 400ml,48,6
+P011,Toothpaste 150g,65,4
+P012,Detergent 1kg,80,5
+P013,Biscuits Pack,130,2
+P014,Noodles Pack,160,2
+P015,Juice 1L,50,4
+P016,Eggs Dozen,38,2
+P017,Bread Loaf,25,1
+P018,Butter 200g,44,3
+P019,Cheese 200g,32,5
+P020,Bottled Water 1L,200,2
