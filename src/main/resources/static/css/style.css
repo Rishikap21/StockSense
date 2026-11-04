@@ -931,3 +931,60 @@ padding: 15px;
         flex-direction: column;
     }
 }
+/* =================================
+   FORECASTS PAGE
+================================= */
+
+.forecast-chart-panel {
+    margin-bottom: 25px;
+}
+
+.forecast-chart-container {
+    position: relative;
+    width: 100%;
+    height: 330px;
+    margin-top: 20px;
+}
+
+.forecast-chart-container canvas {
+    max-width: 100%;
+}
+
+.forecast-table-panel {
+    margin-bottom: 25px;
+}
+
+.forecast-table-panel .inventory-panel-heading select,
+.inventory-panel-heading select {
+    padding: 10px 14px;
+    border: 1px solid #e7eaf1;
+    border-radius: 8px;
+    background: #fafbfe;
+    color: #596277;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.forecast-table-panel .inventory-table {
+    min-width: 850px;
+}
+
+.forecast-table-panel .inventory-table td {
+    white-space: nowrap;
+}
+
+.forecast-table-panel .inventory-table th {
+    white-space: nowrap;
+}
+
+@media (max-width: 650px) {
+    .forecast-chart-container {
+        height: 250px;
+    }
+
+    .forecast-chart-panel,
+    .forecast-table-panel {
+        padding: 15px;
+    }
+}
