@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | StockSense</title>
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<script src="https://cdn.jsdelivr.net/npm/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+```
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+```
+<!-- Sidebar -->
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">S</div>
+        <span>StockSense</span>
+    </div>
+
+    <div class="sidebar-section">
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+    <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+    <a th:href="@{/products}" class="nav-link active">Products</a>
+    <a th:href="@{/forecasts}" class="nav-link">Forecasts</a>
+    <a th:href="@{/alerts}" class="nav-link">Stockout Alerts</a>
+</nav>
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-help">
+            <i data-lucide="help-circle"></i>
+            <span>Need help?</span>
+        </div>
+        <p>© 2026 StockSense</p>
+    </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <p class="breadcrumb">Workspace / <strong>Products</strong></p>
+            <h2>Product Inventory</h2>
+        </div>
+
+        <div class="topbar-right">
+            <div class="profile-avatar">P</div>
+        </div>
+    </header>
+
+    <section class="page-content">
+
+        <!-- Page Heading -->
+        <div class="page-heading">
+            <div>
+                <h1>Inventory Management</h1>
+                <p>Manage products, monitor stock levels and keep your inventory healthy.</p>
+            </div>
+
+            <div class="heading-actions">
+                <button class="secondary-button" id="uploadCsvBtn">
+                    <i data-lucide="upload"></i>
+                    Upload CSV
+                </button>
+
+                <button class="primary-button" id="addProductBtn">
+                    <i data-lucide="plus"></i>
+                    Add Product
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="inventory-summary">
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Total Products</span>
+                    <i data-lucide="package"></i>
+                </div>
+                <h2 id="totalProducts">--</h2>
+                <p>Products in inventory</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>In Stock</span>
+                    <i data-lucide="check-circle"></i>
+                </div>
+                <h2 id="inStockProducts">--</h2>
+                <p>Healthy stock levels</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Low Stock</span>
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <h2 id="lowStockProducts">--</h2>
+                <p>Require attention</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Out of Stock</span>
+                    <i data-lucide="package-x"></i>
+                </div>
+                <h2 id="outOfStockProducts">--</h2>
+                <p>Currently unavailable</p>
+            </div>
+
+        </div>
+
+        <!-- Product Table -->
+        <section class="inventory-panel">
+
+            <div class="inventory-panel-heading">
+                <div>
+                    <h3>All Products</h3>
+                    <p>View and manage your inventory records.</p>
+                </div>
+
+                <span class="product-count" id="productCount">0 products</span>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="inventory-toolbar">
+
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="productSearch"
+                           placeholder="Search products...">
+                </div>
+
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                </select>
+
+                <select id="stockFilter">
+                    <option value="all">All Stock Levels</option>
+                    <option value="in-stock">In Stock</option>
+                    <option value="low-stock">Low Stock</option>
+                    <option value="out-of-stock">Out of Stock</option>
+                </select>
+
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>SKU</th>
+                            <th>CATEGORY</th>
+                            <th>UNIT PRICE</th>
+                            <th>AVAILABLE STOCK</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="productsTableBody">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Product information will appear here when connected to the backend.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span id="tableFooterText">Showing 0 products</span>
+                <span>StockSense Inventory</span>
+            </div>
+
+        </section>
+
+        <!-- CSV Upload -->
+        <input type="file" id="csvFileInput" accept=".csv" hidden>
+
+    </section>
+
+</main>
+```
+
+</div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+
+<script th:src="@{/js/products.js}"></script>
+
+</body>
+</html>
+

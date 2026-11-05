@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockSense | Dashboard</title>
+
+```
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+```
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+```
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="brand">
+        <div class="brand-icon">S</div>
+        <div>
+            <h2>StockSense</h2>
+            <span>INVENTORY INTELLIGENCE</span>
+        </div>
+    </div>
+
+    <div class="nav-heading">WORKSPACE</div>
+
+    <nav class="navigation">
+        <a href="/dashboard" class="nav-link active">
+            <span>▦</span> Dashboard
+        </a>
+        <a href="/products" class="nav-link">
+            <span>▤</span> Products
+        </a>
+        <a href="/forecasts" class="nav-link">
+            <span>◷</span> Demand Forecasts
+        </a>
+        <a href="/alerts" class="nav-link">
+            <span>⚠</span> Stockout Alerts
+        </a>
+    </nav>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-note">
+            <span class="note-icon">✦</span>
+            <h4>Smarter inventory decisions</h4>
+            <p>Stay ahead of demand with intelligent forecasting.</p>
+        </div>
+        <p class="sidebar-version">STOCKSENSE · VERSION 1.0</p>
+    </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+
+    <header class="topbar">
+        <div>
+            <p class="breadcrumb">WORKSPACE / OVERVIEW</p>
+            <h1>Dashboard</h1>
+            <p class="page-subtitle">Monitor your inventory performance at a glance.</p>
+        </div>
+
+        <div class="topbar-right">
+            <div class="system-status">
+                <span class="status-dot"></span>
+                System Overview
+            </div>
+            <div class="profile-avatar">AD</div>
+        </div>
+    </header>
+
+    <!-- WELCOME BANNER -->
+    <section class="welcome-banner">
+        <div>
+            <span class="banner-label">INVENTORY CONTROL CENTER</span>
+            <h2>Good decisions start with<br>better predictions.</h2>
+            <p>Track stock levels, understand demand and prevent stockouts before they happen.</p>
+            <a href="/forecasts" class="banner-button">Explore Forecasts <span>→</span></a>
+        </div>
+        <div class="banner-decoration">↗</div>
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="section-block">
+        <div class="section-heading">
+            <div>
+                <h2>Business Overview</h2>
+                <p>Your inventory performance summary</p>
+            </div>
+            <span class="period-label">CURRENT OVERVIEW</span>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon purple">▤</span>
+                    <span class="stat-tag">INVENTORY</span>
+                </div>
+                <p>Total Products</p>
+                <h3 id="totalProducts">--</h3>
+                <span class="stat-description">Products in your catalogue</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon blue">↗</span>
+                    <span class="stat-tag">SALES</span>
+                </div>
+                <p>Total Sales</p>
+                <h3 id="totalSales">--</h3>
+                <span class="stat-description">Recorded sales quantity</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon orange">▥</span>
+                    <span class="stat-tag">ATTENTION</span>
+                </div>
+                <p>Low Stock Products</p>
+                <h3 id="lowStockProducts">--</h3>
+                <span class="stat-description">Products needing replenishment</span>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-top">
+                    <span class="stat-icon red">⚠</span>
+                    <span class="stat-tag">RISK MONITOR</span>
+                </div>
+                <p>High Stockout Risk</p>
+                <h3 id="highRiskProducts">--</h3>
+                <span class="stat-description">Products at critical risk</span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CHART AND INSIGHTS -->
+    <section class="analytics-grid">
+
+        <div class="content-card chart-card">
+            <div class="card-heading">
+                <div>
+                    <h2>Inventory Analytics</h2>
+                    <p>Visual overview of inventory performance</p>
+                </div>
+                <span class="chart-badge">OVERVIEW</span>
+            </div>
+
+            <div class="chart-wrapper">
+                <canvas id="inventoryChart"></canvas>
+            </div>
+        </div>
+
+        <div class="content-card insights-card">
+            <div class="card-heading">
+                <div>
+                    <h2>Quick Insights</h2>
+                    <p>Important inventory indicators</p>
+                </div>
+            </div>
+
+            <div class="insight-item">
+                <span class="insight-symbol orange">!</span>
+                <div>
+                    <h4>Low Stock Monitoring</h4>
+                    <p>Keep an eye on products approaching their reorder levels.</p>
+                </div>
+            </div>
+
+            <div class="insight-item">
+                <span class="insight-symbol green">↗</span>
+                <div>
+                    <h4>Demand Forecasting</h4>
+                    <p>Use predicted demand to plan your inventory requirements.</p>
+                </div>
+            </div>
+
+            <div class="insight-item">
+                <span class="insight-symbol red">⚑</span>
+                <div>
+                    <h4>Stockout Prevention</h4>
+                    <p>Identify high-risk products and take action early.</p>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ALERT TABLE -->
+    <section class="content-card table-card">
+        <div class="card-heading">
+            <div>
+                <h2>Recent Stockout Alerts</h2>
+                <p>Products that may require immediate attention</p>
+            </div>
+            <a href="/alerts" class="view-all">View all alerts →</a>
+        </div>
+
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>PRODUCT</th>
+                        <th>CURRENT STOCK</th>
+                        <th>RISK LEVEL</th>
+                        <th>RECOMMENDED QUANTITY</th>
+                    </tr>
+                </thead>
+                <tbody id="alertTable">
+                    <tr>
+                        <td colspan="4" class="empty-state">Inventory alerts will appear here when data is connected.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <span>© 2026 StockSense · Intelligent Inventory Management</span>
+        <span>Built for smarter inventory decisions.</span>
+    </footer>
+
+</main>
+```
+
+</div>
+
+<script th:src="@{/js/app.js}"></script>
+
+</body>
+</html>
