@@ -32,26 +32,11 @@
         <p class="sidebar-label">WORKSPACE</p>
 
         <nav class="sidebar-nav">
-            <a href="/dashboard" class="nav-item">
-                <i data-lucide="layout-dashboard"></i>
-                <span>Dashboard</span>
-            </a>
-
-            <a href="/products" class="nav-item active">
-                <i data-lucide="package"></i>
-                <span>Products</span>
-            </a>
-
-            <a href="/forecasts" class="nav-item">
-                <i data-lucide="chart-no-axes-combined"></i>
-                <span>Forecasts</span>
-            </a>
-
-            <a href="/alerts" class="nav-item">
-                <i data-lucide="bell"></i>
-                <span>Stockout Alerts</span>
-            </a>
-        </nav>
+    <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+    <a th:href="@{/products}" class="nav-link active">Products</a>
+    <a th:href="@{/forecasts}" class="nav-link">Forecasts</a>
+    <a th:href="@{/alerts}" class="nav-link">Stockout Alerts</a>
+</nav>
     </div>
 
     <div class="sidebar-bottom">
