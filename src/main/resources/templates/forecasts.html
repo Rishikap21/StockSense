@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Demand Forecasts | StockSense</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+```
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+```
+<!-- Sidebar -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">S</div>
+        <span>StockSense</span>
+    </div>
+
+    <div class="sidebar-section">
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/products" class="nav-item">
+                <i data-lucide="package"></i>
+                <span>Products</span>
+            </a>
+
+            <a href="/forecasts" class="nav-item active">
+                <i data-lucide="chart-no-axes-combined"></i>
+                <span>Forecasts</span>
+            </a>
+
+            <a href="/alerts" class="nav-item">
+                <i data-lucide="bell"></i>
+                <span>Stockout Alerts</span>
+            </a>
+
+        </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-help">
+            <i data-lucide="help-circle"></i>
+            <span>Need help?</span>
+        </div>
+
+        <p>© 2026 StockSense</p>
+    </div>
+
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <header class="topbar">
+
+        <div>
+            <p class="breadcrumb">Workspace / <strong>Forecasts</strong></p>
+            <h2>Demand Forecasting</h2>
+        </div>
+
+        <div class="topbar-right">
+            <div class="profile-avatar">P</div>
+        </div>
+
+    </header>
+
+    <section class="page-content">
+
+        <!-- Heading -->
+        <div class="page-heading">
+
+            <div>
+                <h1>Demand Forecasts</h1>
+                <p>Predict future demand and make smarter inventory decisions.</p>
+            </div>
+
+            <button class="primary-button" id="runForecastBtn">
+                <i data-lucide="refresh-cw"></i>
+                Run Forecast
+            </button>
+
+        </div>
+
+        <!-- Forecast Summary -->
+        <div class="inventory-summary">
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Forecasted Demand</span>
+                    <i data-lucide="trending-up"></i>
+                </div>
+                <h2 id="forecastedDemand">--</h2>
+                <p>Expected units</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Average MAE</span>
+                    <i data-lucide="target"></i>
+                </div>
+                <h2 id="averageMAE">--</h2>
+                <p>Forecast error</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>High Stockout Risk</span>
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <h2 id="highRiskCount">--</h2>
+                <p>Products requiring attention</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Reorder Suggestions</span>
+                    <i data-lucide="shopping-cart"></i>
+                </div>
+                <h2 id="reorderCount">--</h2>
+                <p>Products to replenish</p>
+            </div>
+
+        </div>
+
+        <!-- Forecast Chart -->
+        <section class="inventory-panel forecast-chart-panel">
+
+            <div class="inventory-panel-heading">
+
+                <div>
+                    <h3>Demand Forecast Analysis</h3>
+                    <p>Compare historical demand with predicted demand.</p>
+                </div>
+
+                <select id="forecastPeriod">
+                    <option value="7">Next 7 Days</option>
+                    <option value="14">Next 14 Days</option>
+                    <option value="30">Next 30 Days</option>
+                </select>
+
+            </div>
+
+            <div class="forecast-chart-container">
+                <canvas id="forecastChart"></canvas>
+            </div>
+
+        </section>
+
+        <!-- Forecast Table -->
+        <section class="inventory-panel forecast-table-panel">
+
+            <div class="inventory-panel-heading">
+                <div>
+                    <h3>Product Forecast Details</h3>
+                    <p>Review predicted demand and recommended stock quantities.</p>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="inventory-table">
+
+                    <thead>
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>CURRENT STOCK</th>
+                            <th>PREDICTED DEMAND</th>
+                            <th>MAE</th>
+                            <th>STOCKOUT RISK</th>
+                            <th>REORDER QTY</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="forecastTableBody">
+
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Forecast information will appear here.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+```
+
+</div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+
+<script th:src="@{/js/forecasts.js}"></script>
+
+</body>
+</html>

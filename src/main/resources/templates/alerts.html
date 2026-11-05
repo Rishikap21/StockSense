@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Stockout Alerts | StockSense</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" th:href="@{/css/style.css}">
+```
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+```
+<!-- Sidebar -->
+<aside class="sidebar">
+
+    <div class="brand">
+        <div class="brand-icon">S</div>
+        <span>StockSense</span>
+    </div>
+
+    <div class="sidebar-section">
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <nav class="sidebar-nav">
+
+            <a href="/dashboard" class="nav-item">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="/products" class="nav-item">
+                <i data-lucide="package"></i>
+                <span>Products</span>
+            </a>
+
+            <a href="/forecasts" class="nav-item">
+                <i data-lucide="chart-no-axes-combined"></i>
+                <span>Forecasts</span>
+            </a>
+
+            <a href="/alerts" class="nav-item active">
+                <i data-lucide="bell"></i>
+                <span>Stockout Alerts</span>
+            </a>
+
+        </nav>
+    </div>
+
+    <div class="sidebar-bottom">
+        <div class="sidebar-help">
+            <i data-lucide="help-circle"></i>
+            <span>Need help?</span>
+        </div>
+
+        <p>© 2026 StockSense</p>
+    </div>
+
+</aside>
+
+<!-- Main Content -->
+<main class="main-content">
+
+    <header class="topbar">
+
+        <div>
+            <p class="breadcrumb">Workspace / <strong>Stockout Alerts</strong></p>
+            <h2>Inventory Risk Monitoring</h2>
+        </div>
+
+        <div class="topbar-right">
+            <div class="profile-avatar">P</div>
+        </div>
+
+    </header>
+
+    <section class="page-content">
+
+        <!-- Page Heading -->
+        <div class="page-heading">
+
+            <div>
+                <h1>Stockout Alerts</h1>
+                <p>Identify inventory risks early and prevent products from running out of stock.</p>
+            </div>
+
+            <button class="primary-button" id="refreshAlertsBtn">
+                <i data-lucide="refresh-cw"></i>
+                Refresh Alerts
+            </button>
+
+        </div>
+
+        <!-- Alert Summary -->
+        <div class="inventory-summary">
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Total Alerts</span>
+                    <i data-lucide="bell"></i>
+                </div>
+                <h2 id="totalAlerts">--</h2>
+                <p>Inventory warnings</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>High Risk</span>
+                    <i data-lucide="alert-triangle"></i>
+                </div>
+                <h2 id="highRiskAlerts">--</h2>
+                <p>Immediate attention needed</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Medium Risk</span>
+                    <i data-lucide="alert-circle"></i>
+                </div>
+                <h2 id="mediumRiskAlerts">--</h2>
+                <p>Monitor stock levels</p>
+            </div>
+
+            <div class="inventory-card">
+                <div class="inventory-card-top">
+                    <span>Low Risk</span>
+                    <i data-lucide="check-circle"></i>
+                </div>
+                <h2 id="lowRiskAlerts">--</h2>
+                <p>Stock levels manageable</p>
+            </div>
+
+        </div>
+
+        <!-- Critical Alert Banner -->
+        <div class="critical-alert-banner">
+            <div class="critical-alert-icon">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+
+            <div>
+                <h3>Stay ahead of stockouts</h3>
+                <p>Review high-risk products and plan replenishment before inventory runs out.</p>
+            </div>
+        </div>
+
+        <!-- Alerts Panel -->
+        <section class="inventory-panel alerts-panel">
+
+            <div class="inventory-panel-heading">
+                <div>
+                    <h3>Inventory Risk Alerts</h3>
+                    <p>Products requiring inventory monitoring.</p>
+                </div>
+
+                <span class="product-count" id="alertCount">0 alerts</span>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="inventory-toolbar">
+
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+
+                    <input type="text"
+                           id="alertSearch"
+                           placeholder="Search products...">
+                </div>
+
+                <select id="riskFilter">
+                    <option value="all">All Risk Levels</option>
+                    <option value="HIGH">High Risk</option>
+                    <option value="MEDIUM">Medium Risk</option>
+                    <option value="LOW">Low Risk</option>
+                </select>
+
+            </div>
+
+            <!-- Alert Table -->
+            <div class="table-wrapper">
+
+                <table class="inventory-table">
+
+                    <thead>
+                        <tr>
+                            <th>PRODUCT</th>
+                            <th>CURRENT STOCK</th>
+                            <th>DAILY DEMAND</th>
+                            <th>DAYS REMAINING</th>
+                            <th>RISK LEVEL</th>
+                            <th>REORDER QTY</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="alertsTableBody">
+
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                Alert information will appear here.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="table-footer">
+                <span id="alertsFooter">Showing 0 alerts</span>
+                <span>StockSense Risk Monitoring</span>
+            </div>
+
+        </section>
+
+    </section>
+
+</main>
+```
+
+</div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+
+<script th:src="@{/js/alerts.js}"></script>
+
+</body>
+</html>
