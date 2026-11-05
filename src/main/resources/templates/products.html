@@ -74,7 +74,12 @@
             <div class="heading-actions">
                 <button class="secondary-button" id="uploadCsvBtn">
                     <i data-lucide="upload"></i>
-                    Upload CSV
+                        Upload Products CSV
+                </button>
+
+                <button class="secondary-button" id="uploadSalesCsvBtn">
+                    <i data-lucide="upload"></i>
+                    Upload Sales CSV
                 </button>
 
                 <button class="primary-button" id="addProductBtn">
@@ -146,8 +151,8 @@
                            placeholder="Search products...">
                 </div>
 
-                <select id="categoryFilter">
-                    <option value="all">All Categories</option>
+                <select id="leadTimeFilter">
+                    <option value="all">All Lead Times</option>
                 </select>
 
                 <select id="stockFilter">
@@ -166,10 +171,10 @@
                         <tr>
                             <th>PRODUCT</th>
                             <th>SKU</th>
-                            <th>CATEGORY</th>
-                            <th>UNIT PRICE</th>
+                            <th>LEAD TIME</th>
                             <th>AVAILABLE STOCK</th>
                             <th>STATUS</th>
+                            <th>ACTIONS</th>
                         </tr>
                     </thead>
 
@@ -190,8 +195,11 @@
 
         </section>
 
-        <!-- CSV Upload -->
-        <input type="file" id="csvFileInput" accept=".csv" hidden>
+       <!-- Products CSV Upload -->
+<input type="file" id="csvFileInput" accept=".csv" hidden>
+
+<!-- Sales CSV Upload -->
+<input type="file" id="salesCsvFileInput" accept=".csv" hidden>
 
     </section>
 
