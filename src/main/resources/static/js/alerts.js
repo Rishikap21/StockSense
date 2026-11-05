@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-```
+
 // Temporary demonstration data.
 // Real alerts will come from the backend later.
 
@@ -180,6 +180,6 @@ displayAlerts(alerts);
 if (window.lucide) {
     window.lucide.createIcons();
 }
-```
+
 
 });

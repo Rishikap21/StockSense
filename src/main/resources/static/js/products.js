@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-```
+
 const products = [
     { name: "Wireless Headphones", sku: "SS-1001", category: "Electronics", price: 2499, stock: 45, minimumStock: 10 },
     { name: "Laptop Stand", sku: "SS-1002", category: "Accessories", price: 899, stock: 7, minimumStock: 10 },
@@ -155,6 +155,6 @@ displayProducts(products);
 if (window.lucide) {
     window.lucide.createIcons();
 }
-```
+
 
 });
