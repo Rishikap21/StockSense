@@ -2,11 +2,21 @@ package com.stocksense.service;
 
 import com.stocksense.entity.Sale;
 import com.stocksense.entity.Forecast;
+import com.stocksense.repository.ForecastRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class ForecastService {
+
+    @Autowired
+    private ForecastRepository forecastRepository;
+
+    // NEW METHOD: Call this right before saving new forecasts to fix the duplicate bug permanently!
+    public void clearOldForecasts() {
+        forecastRepository.deleteAll();
+    }
 
     // 1. Moving Average Forecasting using Sale entity
     public double calculateMovingAverage(List<Sale> recentSales) {

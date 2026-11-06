@@ -1,4 +1,3 @@
-
 package com.stocksense.controller;
 
 import com.stocksense.entity.Sale;
@@ -47,6 +46,9 @@ public class ForecastController {
     public ResponseEntity<?> runForecast() {
 
         try {
+            // BUG FIX ADDED HERE: Wipe old records before calculating new ones
+            forecastService.clearOldForecasts();
+
             List<ForecastResponse> forecasts =
                     forecastCalculationService.generateForecastsForAllProducts();
 
