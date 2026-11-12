@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product | StockSense</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <span>StockSense</span>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="sidebar-label">WORKSPACE</p>
+
+            <nav class="sidebar-nav">
+                <a th:href="@{/dashboard}" class="nav-link">Dashboard</a>
+                <a th:href="@{/products}" class="nav-link">Products</a>
+                <a th:href="@{/form}" class="nav-link active">Add Product</a>
+                <a th:href="@{/forecasts}" class="nav-link">Forecasts</a>
+                <a th:href="@{/alerts}" class="nav-link">Stockout Alerts</a>
+            </nav>
+        </div>
+
+        <div class="sidebar-bottom">
+            <p>© 2026 StockSense</p>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">Workspace / Products / <strong>Add Product</strong></p>
+                <h1>Add New Product</h1>
+                <p class="page-subtitle">Enter product details to add them to your inventory.</p>
+            </div>
+
+            <div class="topbar-right">
+                <div class="profile-avatar">P</div>
+            </div>
+        </header>
+
+        <section class="page-content">
+
+            <div class="product-form-container">
+
+                <h2>Product Information</h2>
+                <p class="form-description">
+                    Fill in the details below to register a new inventory product.
+                </p>
+
+                <form id="productForm">
+
+                    <div class="product-form-group">
+                        <label for="productCode">Product Code</label>
+                        <input type="text" id="productCode"
+                               placeholder="Example: P021" required>
+                    </div>
+
+                    <div class="product-form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName"
+                               placeholder="Enter product name" required>
+                    </div>
+
+                    <div class="product-form-group">
+                        <label for="category">Product Category</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="FAST_MOVING">Fast Moving</option>
+                            <option value="MEDIUM_MOVING">Medium Moving</option>
+                            <option value="SLOW_MOVING">Slow Moving</option>
+                        </select>
+                    </div>
+
+                    <div class="product-form-group">
+                        <label for="currentStock">Current Stock</label>
+                        <input type="number" id="currentStock"
+                               min="0" placeholder="Enter available stock" required>
+                    </div>
+
+                    <div class="product-form-group">
+                        <label for="leadTimeDays">Lead Time (Days)</label>
+                        <input type="number" id="leadTimeDays"
+                               min="1" placeholder="Enter lead time" required>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="primary-button">
+                            Add Product
+                        </button>
+
+                        <a href="/products" class="secondary-button">
+                            Cancel
+                        </a>
+                    </div>
+
+                    <p id="message" class="form-message"></p>
+
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+</div>
+<script th:src="@{/js/form.js}"></script>
+</body>
+</html>

@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const SALES_CSV_API = "/api/csv/upload/sales";
 
     let products = [];
+    let selectedProductToDelete = null;
 
     // HTML elements
     const tableBody = document.getElementById("productsTableBody");
@@ -21,6 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadSalesButton = document.getElementById("uploadSalesCsvBtn");
     const addProductButton = document.getElementById("addProductBtn");
 
+    // Notification elements
+    const notification = document.getElementById("productNotification");
+
+    // Delete modal elements
+    const deleteModal = document.getElementById("deleteModal");
+    const deleteMessage = document.getElementById("deleteMessage");
+    const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+    const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
     // Check required HTML elements
     const requiredElements = [
         tableBody,
@@ -31,7 +41,12 @@ document.addEventListener("DOMContentLoaded", function () {
         salesFileInput,
         uploadProductsButton,
         uploadSalesButton,
-        addProductButton
+        addProductButton,
+        notification,
+        deleteModal,
+        deleteMessage,
+        cancelDeleteBtn,
+        confirmDeleteBtn
     ];
 
     if (requiredElements.some(element => !element)) {
@@ -39,9 +54,25 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
+    // Show website notification
+    function showProductNotification(text, type = "success") {
+
+        notification.textContent = text;
+        notification.className = "product-notification " + type;
+        notification.hidden = false;
+
+        window.clearTimeout(notification.hideTimer);
+
+        notification.hideTimer = window.setTimeout(function () {
+            notification.hidden = true;
+        }, 3500);
+    }
+
     // Load products from database
     async function loadProducts() {
+
         try {
+
             tableBody.innerHTML = `
                 <tr>
                     <td colspan="6" class="empty-state">
@@ -69,6 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
             filterProducts();
 
         } catch (error) {
+
             console.error("Products loading error:", error);
 
             tableBody.innerHTML = `
@@ -81,14 +113,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Determine stock status
+    // Determine stock status using category threshold
     function getStockStatus(product) {
 
         const stock = Number(product.currentStock);
+        const threshold = Number(product.minimumStockThreshold);
 
-        if (stock === 0) return "out-of-stock";
+        if (stock <= 0) {
+            return "out-of-stock";
+        }
 
-        if (stock < 50) return "low-stock";
+        if (stock <= threshold) {
+            return "low-stock";
+        }
 
         return "in-stock";
     }
@@ -221,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteButton.className = "secondary-button";
 
             deleteButton.addEventListener("click", function () {
-                deleteProduct(product);
+                openDeleteModal(product);
             });
 
             actionCell.appendChild(editButton);
@@ -260,170 +297,102 @@ document.addEventListener("DOMContentLoaded", function () {
         displayProducts(filtered);
     }
 
-    // Add product
-    async function addProduct() {
+    // Edit product - open separate form page
+    function editProduct(product) {
+        window.location.href = `/form?id=${product.id}`;
+    }
 
-        const productCode = prompt("Enter product code:");
-        if (productCode === null) return;
+    // Open custom delete confirmation modal
+    function openDeleteModal(product) {
 
-        const productName = prompt("Enter product name:");
-        if (productName === null) return;
+        selectedProductToDelete = product;
 
-        const stockInput = prompt("Enter current stock:");
-        if (stockInput === null) return;
+       deleteMessage.textContent =
+    `Are you sure you want to delete "${product.productName}"?`;
+        deleteModal.hidden = false;
 
-        const leadInput = prompt("Enter lead time in days:");
-        if (leadInput === null) return;
+    }
 
-        const currentStock = Number(stockInput);
-        const leadTimeDays = Number(leadInput);
+    // Close custom delete confirmation modal
+    function closeDeleteModal() {
 
-        if (
-            !productCode.trim() ||
-            !productName.trim() ||
-            !Number.isInteger(currentStock) ||
-            currentStock < 0 ||
-            !Number.isInteger(leadTimeDays) ||
-            leadTimeDays <= 0
-        ) {
-            alert("Please enter valid product details.");
+        deleteModal.hidden = true;
+        selectedProductToDelete = null;
+
+        confirmDeleteBtn.disabled = false;
+    }
+
+    // Cancel deletion
+    cancelDeleteBtn.addEventListener("click", function () {
+        closeDeleteModal();
+    });
+
+    // Close modal when clicking outside the popup
+    deleteModal.addEventListener("click", function (event) {
+
+        if (event.target === deleteModal) {
+            closeDeleteModal();
+        }
+    });
+
+    // Close modal using Escape key
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape" && !deleteModal.hidden) {
+            closeDeleteModal();
+        }
+    });
+
+    // Confirm and delete product
+    confirmDeleteBtn.addEventListener("click", async function () {
+
+        if (!selectedProductToDelete) {
             return;
         }
 
-        try {
+        const productId = selectedProductToDelete.id;
 
-            const response = await fetch(API, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    productCode: productCode.trim(),
-                    productName: productName.trim(),
-                    currentStock: currentStock,
-                    leadTimeDays: leadTimeDays
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(await response.text());
-            }
-
-            alert("Product added successfully!");
-
-            await loadProducts();
-
-        } catch (error) {
-
-            console.error("Add product error:", error);
-            alert("Unable to add product: " + error.message);
-        }
-    }
-
-    // Edit product
-    async function editProduct(product) {
-
-        const productName = prompt(
-            "Enter product name:",
-            product.productName
-        );
-
-        if (productName === null) return;
-
-        const stockInput = prompt(
-            "Enter current stock:",
-            product.currentStock
-        );
-
-        if (stockInput === null) return;
-
-        const leadInput = prompt(
-            "Enter lead time:",
-            product.leadTimeDays
-        );
-
-        if (leadInput === null) return;
-
-        const currentStock = Number(stockInput);
-        const leadTimeDays = Number(leadInput);
-
-        if (
-            !productName.trim() ||
-            !Number.isInteger(currentStock) ||
-            currentStock < 0 ||
-            !Number.isInteger(leadTimeDays) ||
-            leadTimeDays <= 0
-        ) {
-            alert("Please enter valid values.");
-            return;
-        }
+        confirmDeleteBtn.disabled = true;
 
         try {
 
-            const response = await fetch(`${API}/${product.id}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    productCode: product.productCode,
-                    productName: productName.trim(),
-                    currentStock: currentStock,
-                    leadTimeDays: leadTimeDays
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(await response.text());
-            }
-
-            alert("Product updated successfully!");
-
-            await loadProducts();
-
-        } catch (error) {
-
-            console.error("Edit product error:", error);
-            alert("Unable to update product: " + error.message);
-        }
-    }
-
-    // Delete product
-    async function deleteProduct(product) {
-
-        const confirmed = confirm(
-            "Are you sure you want to delete " +
-            product.productName + "?"
-        );
-
-        if (!confirmed) return;
-
-        try {
-
-            const response = await fetch(`${API}/${product.id}`, {
+            const response = await fetch(`${API}/${productId}`, {
                 method: "DELETE"
             });
 
             if (!response.ok) {
-                throw new Error(await response.text());
+                throw new Error("Unable to delete product.");
             }
 
-            alert("Product deleted successfully!");
+            closeDeleteModal();
 
             await loadProducts();
+
+            showProductNotification(
+                "Product deleted successfully!"
+            );
 
         } catch (error) {
 
             console.error("Delete product error:", error);
-            alert("Unable to delete product: " + error.message);
+
+            closeDeleteModal();
+
+            showProductNotification(
+                "Unable to delete product. Please try again.",
+                "error"
+            );
         }
-    }
+    });
 
     // Upload products CSV
     async function uploadProductsCSV(file) {
 
         if (!file.name.toLowerCase().endsWith(".csv")) {
-            alert("Please select a valid CSV file.");
+            showProductNotification(
+                "Please select a valid CSV file.",
+                "error"
+            );
             return;
         }
 
@@ -443,10 +412,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 throw new Error(result.error || "Products CSV upload failed.");
             }
 
-            alert(
-                result.message +
-                "\nRecords imported: " +
-                result.recordsImported
+            showProductNotification(
+                result.message + " Records imported: " + result.recordsImported
             );
 
             await loadProducts();
@@ -454,7 +421,11 @@ document.addEventListener("DOMContentLoaded", function () {
         } catch (error) {
 
             console.error("Products CSV error:", error);
-            alert("Products CSV upload error: " + error.message);
+
+            showProductNotification(
+                "Products CSV upload error: " + error.message,
+                "error"
+            );
 
         } finally {
             productsFileInput.value = "";
@@ -465,7 +436,10 @@ document.addEventListener("DOMContentLoaded", function () {
     async function uploadSalesCSV(file) {
 
         if (!file.name.toLowerCase().endsWith(".csv")) {
-            alert("Please select a valid CSV file.");
+            showProductNotification(
+                "Please select a valid CSV file.",
+                "error"
+            );
             return;
         }
 
@@ -485,16 +459,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 throw new Error(result.error || "Sales CSV upload failed.");
             }
 
-            alert(
-                result.message +
-                "\nRecords imported: " +
-                result.recordsImported
+            showProductNotification(
+                result.message + " Records imported: " + result.recordsImported
             );
 
         } catch (error) {
 
             console.error("Sales CSV error:", error);
-            alert("Sales CSV upload error: " + error.message);
+
+            showProductNotification(
+                "Sales CSV upload error: " + error.message,
+                "error"
+            );
 
         } finally {
             salesFileInput.value = "";
@@ -529,12 +505,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Other event listeners
+    // Search and filter event listeners
     searchInput.addEventListener("input", filterProducts);
     leadTimeFilter.addEventListener("change", filterProducts);
     stockFilter.addEventListener("change", filterProducts);
 
-    addProductButton.addEventListener("click", addProduct);
+    // Add Product button redirects to separate form page
+    addProductButton.addEventListener("click", function () {
+        window.location.href = "/form";
+    });
 
     // Initial load
     loadProducts();

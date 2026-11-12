@@ -25,7 +25,10 @@ public class PageController {
     public String forecasts() {
         return "forecasts";
     }
-
+    @GetMapping("/form")
+    public String form() {
+        return "form";
+    }
     @GetMapping("/alerts")
     public String alerts() {
         return "alerts";

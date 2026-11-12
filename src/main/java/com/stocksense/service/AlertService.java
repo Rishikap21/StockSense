@@ -1,3 +1,4 @@
+
 package com.stocksense.service;
 
 import com.stocksense.entity.Forecast;
@@ -47,19 +48,29 @@ public class AlertService {
 
             double dailyDemand = forecast.getPredictedDemand();
 
+            int currentStock = product.getCurrentStock();
+
+            Integer threshold = product.getMinimumStockThreshold();
+
+            boolean lowStock = threshold != null &&
+                    currentStock <= threshold;
+
             double daysRemaining = stockService.calculateDaysRemaining(
-                    product.getCurrentStock(), dailyDemand);
+                    currentStock, dailyDemand);
 
             int reorderQuantity = stockService.calculateReorderQuantity(
                     dailyDemand,
                     product.getLeadTimeDays(),
-                    product.getCurrentStock()
+                    currentStock
             );
 
             Map<String, Object> alert = new LinkedHashMap<>();
 
             alert.put("name", product.getProductName());
-            alert.put("currentStock", product.getCurrentStock());
+            alert.put("category", product.getCategory());
+            alert.put("currentStock", currentStock);
+            alert.put("minimumStockThreshold", threshold);
+            alert.put("lowStock", lowStock);
             alert.put("dailyDemand", dailyDemand);
             alert.put("daysRemaining",
                     dailyDemand > 0 ? daysRemaining : null);

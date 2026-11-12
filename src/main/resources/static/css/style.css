@@ -1104,3 +1104,213 @@ padding: 15px;
     background: #6655e8;
     color: white;
 }
+
+/* =================================
+   ADD PRODUCT FORM PAGE
+================================= */
+
+.product-form-container {
+    max-width: 750px;
+    margin: 30px auto;
+    background: white;
+    padding: 35px;
+    border: 1px solid #edf0f5;
+    border-radius: 14px;
+    box-shadow: 0 3px 12px rgba(30, 40, 70, 0.03);
+}
+
+.product-form-container h2 {
+    font-size: 22px;
+    color: #202940;
+    margin-bottom: 8px;
+}
+
+.product-form-container .form-description {
+    color: #929bad;
+    font-size: 13px;
+    margin-bottom: 28px;
+}
+
+.product-form-group {
+    margin-bottom: 20px;
+}
+
+.product-form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #444d63;
+    margin-bottom: 8px;
+}
+
+.product-form-group input,
+.product-form-group select {
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #e4e7ef;
+    border-radius: 9px;
+    background: #fafbfe;
+    font-family: inherit;
+    font-size: 13px;
+    color: #202940;
+    outline: none;
+}
+
+.product-form-group input:focus,
+.product-form-group select:focus {
+    border-color: #6658df;
+    background: white;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.form-message {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+@media (max-width: 650px) {
+    .product-form-container {
+        padding: 22px;
+        margin: 15px auto;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+/* PRODUCT NOTIFICATION */
+.product-notification {
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #b7e4c7;
+    background: #eafaf0;
+    color: #21844a;
+}
+
+.product-notification.error {
+    background: #fff0f0;
+    color: #d93636;
+    border-color: #f5c2c2;
+}
+
+/* CUSTOM DELETE CONFIRMATION MODAL */
+
+.delete-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(20, 25, 40, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.delete-modal[hidden] {
+    display: none;
+}
+
+.delete-modal-content {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+    text-align: center;
+    animation: modalAppear 0.2s ease-out;
+}
+
+.delete-modal-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: #fff0f0;
+    color: #dc4444;
+}
+
+.delete-modal-icon i {
+    width: 27px;
+    height: 27px;
+}
+
+.delete-modal-content h3 {
+    margin-bottom: 10px;
+    color: #202940;
+    font-size: 21px;
+}
+
+.delete-modal-content p {
+    margin-bottom: 26px;
+    color: #737d91;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.delete-modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.delete-modal-actions button {
+    min-width: 115px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.delete-confirm-btn {
+    background: #dc4444 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.delete-confirm-btn:hover {
+    background: #c93232 !important;
+}
+
+.delete-confirm-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes modalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .delete-modal-content {
+        padding: 24px 18px;
+    }
+
+    .delete-modal-actions {
+        flex-direction: column;
+    }
+
+    .delete-modal-actions button {
+        width: 100%;
+    }
+}

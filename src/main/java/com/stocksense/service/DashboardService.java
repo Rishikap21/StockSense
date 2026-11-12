@@ -38,9 +38,14 @@ public class DashboardService {
                 .mapToInt(sale -> sale.getQuantitySold())
                 .sum();
 
+        // Count products whose stock is at or below
+        // their category-specific minimum threshold
         long lowStockProducts = productRepository.findAll()
                 .stream()
-                .filter(product -> product.getCurrentStock() < 50)
+                .filter(product ->
+                        product.getMinimumStockThreshold() != null &&
+                        product.getCurrentStock() <=
+                                product.getMinimumStockThreshold())
                 .count();
 
         List<Forecast> forecasts = forecastRepository.findAll();

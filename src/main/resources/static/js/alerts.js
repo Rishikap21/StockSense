@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="6" class="empty-state">
+                    <td colspan="9" class="empty-state">
                         Unable to load alerts. Please try again.
                     </td>
                 </tr>
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const row = document.createElement("tr");
             const cell = document.createElement("td");
 
-            cell.colSpan = 6;
+            cell.colSpan = 9;
             cell.className = "empty-state";
             cell.textContent = "No alerts found.";
 
@@ -76,36 +76,75 @@ document.addEventListener("DOMContentLoaded", function () {
         list.forEach(item => {
             const row = document.createElement("tr");
 
-            const values = [
-                item.name,
-                item.currentStock + " units",
-                Number(item.dailyDemand).toFixed(2) + " units",
+            // Product name
+            addCell(row, item.name);
+
+            // Category
+            addCell(row, item.category || "N/A");
+
+            // Current stock
+            addCell(row, item.currentStock + " units");
+
+            // Category-specific minimum stock threshold
+            addCell(
+                row,
+                item.minimumStockThreshold == null
+                    ? "N/A"
+                    : item.minimumStockThreshold + " units"
+            );
+
+            // Low stock status
+            const stockCell = document.createElement("td");
+            const stockBadge = document.createElement("span");
+
+            stockBadge.className = item.lowStock
+                ? "risk-badge risk-high"
+                : "risk-badge risk-low";
+
+            stockBadge.textContent = item.lowStock
+                ? "LOW STOCK"
+                : "NORMAL";
+
+            stockCell.appendChild(stockBadge);
+            row.appendChild(stockCell);
+
+            // Daily demand
+            addCell(
+                row,
+                Number(item.dailyDemand).toFixed(2) + " units"
+            );
+
+            // Days remaining
+            addCell(
+                row,
                 item.daysRemaining == null
                     ? "N/A"
                     : Number(item.daysRemaining).toFixed(1) + " days"
-            ];
+            );
 
-            values.forEach(value => {
-                const cell = document.createElement("td");
-                cell.textContent = value;
-                row.appendChild(cell);
-            });
-
+            // Stockout risk
             const riskCell = document.createElement("td");
-            const badge = document.createElement("span");
+            const riskBadge = document.createElement("span");
 
-            badge.className = "risk-badge risk-" + item.risk.toLowerCase();
-            badge.textContent = item.risk;
+            const risk = String(item.risk || "UNKNOWN").toLowerCase();
 
-            riskCell.appendChild(badge);
+            riskBadge.className = "risk-badge risk-" + risk;
+            riskBadge.textContent = item.risk || "UNKNOWN";
+
+            riskCell.appendChild(riskBadge);
             row.appendChild(riskCell);
 
-            const reorderCell = document.createElement("td");
-            reorderCell.textContent = item.reorder + " units";
-            row.appendChild(reorderCell);
+            // Reorder quantity
+            addCell(row, item.reorder + " units");
 
             tableBody.appendChild(row);
         });
+    }
+
+    function addCell(row, value) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.appendChild(cell);
     }
 
     function filterAlerts() {
@@ -113,8 +152,10 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedRisk = riskFilter.value;
 
         const filteredAlerts = alerts.filter(item => {
+
             const matchesSearch =
-                item.name.toLowerCase().includes(searchText);
+                (item.name || "").toLowerCase().includes(searchText) ||
+                (item.category || "").toLowerCase().includes(searchText);
 
             const matchesRisk =
                 selectedRisk === "all" || item.risk === selectedRisk;
