@@ -26,6 +26,12 @@ public class Product {
     @Column(name = "lead_time_days", nullable = false)
     private Integer leadTimeDays;
 
+    @Column(name = "category", length = 30)
+    private String category;
+
+    @Column(name = "minimum_stock_threshold")
+    private Integer minimumStockThreshold;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -77,6 +83,22 @@ public class Product {
 
     public void setLeadTimeDays(Integer leadTimeDays) {
         this.leadTimeDays = leadTimeDays;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getMinimumStockThreshold() {
+        return minimumStockThreshold;
+    }
+
+    public void setMinimumStockThreshold(Integer minimumStockThreshold) {
+        this.minimumStockThreshold = minimumStockThreshold;
     }
 
     public LocalDateTime getCreatedAt() {
