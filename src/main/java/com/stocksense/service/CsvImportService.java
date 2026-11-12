@@ -1,3 +1,4 @@
+
 package com.stocksense.service;
 
 import com.stocksense.entity.Product;
@@ -53,7 +54,7 @@ public class CsvImportService {
 
                 String[] data = line.split(",", -1);
 
-                if (data.length != 4) {
+                if (data.length != 4 && data.length != 5) {
                     throw new IllegalArgumentException(
                             "Invalid product CSV row: " + line);
                 }
@@ -63,10 +64,31 @@ public class CsvImportService {
                 int currentStock = Integer.parseInt(data[2].trim());
                 int leadTimeDays = Integer.parseInt(data[3].trim());
 
+                String category = data.length == 5
+                        ? data[4].trim().toUpperCase()
+                        : "MEDIUM_MOVING";
+
                 if (productCode.isEmpty() || productName.isEmpty()
                         || currentStock < 0 || leadTimeDays < 0) {
                     throw new IllegalArgumentException(
                             "Invalid product values: " + line);
+                }
+
+                int threshold;
+
+                switch (category) {
+                    case "FAST_MOVING":
+                        threshold = 50;
+                        break;
+                    case "MEDIUM_MOVING":
+                        threshold = 30;
+                        break;
+                    case "SLOW_MOVING":
+                        threshold = 10;
+                        break;
+                    default:
+                        throw new IllegalArgumentException(
+                                "Invalid product category: " + category);
                 }
 
                 Product product = productRepository
@@ -77,6 +99,8 @@ public class CsvImportService {
                 product.setProductName(productName);
                 product.setCurrentStock(currentStock);
                 product.setLeadTimeDays(leadTimeDays);
+                product.setCategory(category);
+                product.setMinimumStockThreshold(threshold);
 
                 productRepository.save(product);
                 importedCount++;
